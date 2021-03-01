@@ -12,16 +12,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//        registry.addMapping("/**").allowedOrigins("*").allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH");
+//    }
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins("*").allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH");
+        registry.addMapping("/**")
+                .allowedMethods("*");
     }
-//    @Bean
-//    @Primary
-//    public MappingJackson2HttpMessageConverter jacksonMessageConverter(){
-//        MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
-//        ObjectMapper mapper = new ObjectMapper();
-//        messageConverter.setObjectMapper(mapper);
-//        return messageConverter;
-//    9}
+
 }

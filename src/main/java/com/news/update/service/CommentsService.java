@@ -13,6 +13,7 @@ public interface CommentsService {
     public boolean edit(String id, CommentsRequest commentsRequest);
 
     public boolean delete(String id);
+
     public Map getAll(String newsid);
 
 }

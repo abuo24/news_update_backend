@@ -12,15 +12,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AdminsServiceImpl implements AdminService {
-
-
     @Autowired
     private AdminsRepository adminRepository;
 
 
     @Override
     public boolean save(Admins admin) {
-
         try {
             Admins admin1 = adminRepository.save(admin);
 
@@ -54,5 +51,4 @@ public class AdminsServiceImpl implements AdminService {
         }
         return false;
     }
-
 }

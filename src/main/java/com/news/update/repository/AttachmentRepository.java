@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AttachmentRepository extends JpaRepository< Attachment, String> {
-
     Attachment findByHashId(String hashId);
 }

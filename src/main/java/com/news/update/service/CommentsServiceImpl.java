@@ -29,8 +29,6 @@ public class CommentsServiceImpl implements CommentsService {
 
     @Override
     public boolean create(String id, CommentsRequest commentsRequest) {
-        System.out.println(id);
-        System.out.println(commentsRequest);
         try {
             Comments comments = new Comments();
             comments.setMessage(commentsRequest.getMessage());
@@ -38,7 +36,7 @@ public class CommentsServiceImpl implements CommentsService {
             comments.setAuthorMail(commentsRequest.getAuthorMail());
             if (newsRepository.findById(id).get() != null) {
                 comments.setNews(newsRepository.findById(id).get());
-                if (commentsRequest.getComments_id() != null && commentsRepository.findById(commentsRequest.getComments_id()).get() != null) {
+               if (commentsRequest.getComments_id() != null && commentsRepository.findById(commentsRequest.getComments_id()).get() != null) {
                     comments.setComments(commentsRepository.findById(commentsRequest.getComments_id()).get());
                 }
                 Comments comments1 = commentsRepository.save(comments);

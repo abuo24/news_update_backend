@@ -36,15 +36,9 @@ public class Comments implements Serializable {
     private String authorMail;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "reply_comment",
-            joinColumns = @JoinColumn(name = "comment_id"),
-            inverseJoinColumns = @JoinColumn(name = "reply_comment_id"))
     private Comments comments;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "news_comment",
-            joinColumns = @JoinColumn(name = "comment_id"),
-            inverseJoinColumns = @JoinColumn(name = "news_id"))
     private News news;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

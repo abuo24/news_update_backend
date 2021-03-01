@@ -7,6 +7,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,7 +26,7 @@ public class NewsRequest {
 
     private Long viewsCount;
 
-    private String news_id;
+    private List<String> tags;
 
     private String category_id;
 

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
+@CrossOrigin
 @Controller
 @RequestMapping("/api/comments")
 public class CommentsController {

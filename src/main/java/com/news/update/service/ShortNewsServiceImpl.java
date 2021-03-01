@@ -95,7 +95,7 @@ public class ShortNewsServiceImpl implements ShortNewsServise {
             List<ShortNews> tutorials = new ArrayList<>();
             Pageable paging = PageRequest.of(page, size);
 
-            Page<ShortNews> pageTuts = shortNewsRepository.findAllByCategoryId(categoryid, paging);
+            Page<ShortNews> pageTuts = shortNewsRepository.findAllByCategoryIdOrderByCreateAtDesc(categoryid, paging);
             tutorials = pageTuts.getContent();
             System.out.println(tutorials);
 

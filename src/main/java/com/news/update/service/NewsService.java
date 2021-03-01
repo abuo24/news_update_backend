@@ -2,6 +2,8 @@ package com.news.update.service;
 
 import com.news.update.entity.News;
 import com.news.update.payload.NewsRequest;
+import com.news.update.payload.NewsResponse;
+import com.news.update.payload.PostRequestLikesAndViews;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -12,11 +14,15 @@ import java.util.List;
 import java.util.Map;
 
 public interface NewsService {
-    public List<News> getAll();
-
+    public NewsResponse getOne(String id);
+    public List<NewsResponse> getAll();
+    public List<NewsResponse> getAllPostsByPopular();
     public boolean create(String hashId, NewsRequest newsRequest);
 
     public boolean edit(String id, NewsRequest newsRequest);
+
+
+    public boolean editViews(String id);
 
     public boolean delete(String id);
 

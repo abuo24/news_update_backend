@@ -4,16 +4,17 @@ package com.news.update.controller;
 import com.news.update.entity.Admins;
 import com.news.update.entity.Attachment;
 import com.news.update.entity.Category;
+import com.news.update.entity.News;
 import com.news.update.model.Result;
 import com.news.update.model.ResultSucces;
-import com.news.update.payload.AdminRequest;
-import com.news.update.payload.NewsRequest;
-import com.news.update.payload.ShortNewsRequest;
+import com.news.update.payload.*;
 import com.news.update.repository.AdminsRepository;
+import com.news.update.repository.NewsRepository;
 import com.news.update.security.JwtTokenProvider;
 import com.news.update.service.*;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+@CrossOrigin
 @Controller
 @RequestMapping("/api/admin")
 public class AdminsController {
@@ -42,8 +44,12 @@ public class AdminsController {
 
     @Autowired
     private AdminsRepository adminsRepository;
+
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    private NewsRepository newsRepository;
 
 
    @PutMapping("/edit")
@@ -94,10 +100,24 @@ public class AdminsController {
 
     }
 
-
     @GetMapping("/news/all")
     public ResponseEntity getNews() {
         return ResponseEntity.ok(new ResultSucces(true, newsService.getAll()));
+    }
+    @GetMapping("/news/most")
+    public ResponseEntity getNewsMostPopular() {
+        return ResponseEntity.ok(new ResultSucces(true,
+                newsService.getAllPostsByPopular()
+        ));
+    }
+
+    @GetMapping("/news/{id}")
+    public ResponseEntity getNewsbyId(@PathVariable String id){
+       NewsResponse news = newsService.getOne(id);
+       if (news==null){
+           return ResponseEntity.ok(new Result(false, "post topilmadi"));
+       }
+        return ResponseEntity.ok(new ResultSucces(true, news));
     }
 
     @GetMapping("/{categoryid}/news")
@@ -121,6 +141,15 @@ public class AdminsController {
     @PutMapping("/news/{id}")
     public ResponseEntity editNews(@PathVariable String id, NewsRequest newsRequest) {
         if (newsService.edit(id, newsRequest)) {
+            return ResponseEntity.ok(new Result(true, "o'zgartirildi"));
+        }
+        return new ResponseEntity(new Result(false, "o'zgartirilmadi"), HttpStatus.BAD_REQUEST);
+    }
+
+
+    @PutMapping("/news/like/{id}")
+    public ResponseEntity editViewsAndLikes(@PathVariable String id) {
+        if (newsService.editViews(id)) {
             return ResponseEntity.ok(new Result(true, "o'zgartirildi"));
         }
         return new ResponseEntity(new Result(false, "o'zgartirilmadi"), HttpStatus.BAD_REQUEST);

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ShortNewsRepository extends JpaRepository<ShortNews, String> {
-    Page<ShortNews> findAllByCategoryId(
+    Page<ShortNews> findAllByCategoryIdOrderByCreateAtDesc(
             @Param("categoryid")
                     String categoryid,
             Pageable pageable);

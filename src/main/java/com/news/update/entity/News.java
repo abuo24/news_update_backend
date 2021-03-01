@@ -11,6 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -39,6 +40,9 @@ public class News implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Category category;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Tags> tags;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(nullable = false, updatable = false)

@@ -19,6 +19,7 @@ import java.util.*;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
