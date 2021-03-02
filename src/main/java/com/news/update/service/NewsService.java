@@ -25,7 +25,8 @@ public interface NewsService {
     public boolean editViews(String id);
 
     public boolean delete(String id);
-
+    public boolean decrementLikes(String id);
+    public boolean incrementLikes(String id);
     public Map getPages(String categoryid, int page, int size);
 
 }

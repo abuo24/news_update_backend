@@ -161,6 +161,38 @@ public class NewsServiceImpl implements NewsService {
         }
         return false;
     }
+    @Override
+    public boolean incrementLikes(String id) {
+        try {
+            News newsService1 = newsRepository.findById(id).get();
+            newsService1.setLikesCount(newsService1.getLikesCount()==null?1:newsService1.getLikesCount()+1);
+            newsService1.setId(id);
+            newsService1.setCreateAt(newsService1.getCreateAt());
+            if (newsRepository.save(newsService1) != null) {
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
+        }
+        return false;
+    }
+    @Override
+    public boolean decrementLikes(String id) {
+        try {
+            News newsService1 = newsRepository.findById(id).get();
+            newsService1.setLikesCount(newsService1.getLikesCount()==0||newsService1.getLikesCount()==null?0:(newsService1.getLikesCount()-1));
+            newsService1.setId(id);
+            newsService1.setCreateAt(newsService1.getCreateAt());
+            if (newsRepository.save(newsService1) != null) {
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
+        }
+        return false;
+    }
 
     @Override
     public boolean delete(String id) {
@@ -192,8 +224,19 @@ public class NewsServiceImpl implements NewsService {
             Page<News> pageTuts = newsRepository.findAllByCategoryIdOrderByCreateAtDesc(categoryid, paging);
             tutorials = pageTuts.getContent();
             System.out.println(tutorials);
+            NewsResponse newsResponse = null;
+            List<Comments> comments = null;
+            List<NewsResponse> newsResponses = new ArrayList<>();
+            for (int i = 0; i < tutorials.size(); i++) {
+                comments = new ArrayList<>();
+                newsResponse = new NewsResponse();
+                comments = commentsRepository.findAllByNewsIdOrderByCreateAtDesc(tutorials.get(i).getId());
+                newsResponse = new NewsResponse(tutorials.get(i).getId(), tutorials.get(i).getContent(), tutorials.get(i).getTitle(), tutorials.get(i).getHeadAttachment(), tutorials.get(i).getYoutube(), tutorials.get(i).getLikesCount(), tutorials.get(i).getViewsCount(), tutorials.get(i).getCategory(), tutorials.get(i).getTags(), comments, tutorials.get(i).getCreateAt());
+                 newsResponses.add(newsResponse);
+            }
+
             Map<String, Object> response = new HashMap<>();
-            response.put("news", tutorials);
+            response.put("news", newsResponses);
             response.put("currentPage", pageTuts.getNumber());
             response.put("totalItems", pageTuts.getTotalElements());
             response.put("totalPages", pageTuts.getTotalPages());

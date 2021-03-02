@@ -147,9 +147,23 @@ public class AdminsController {
     }
 
 
-    @PutMapping("/news/like/{id}")
-    public ResponseEntity editViewsAndLikes(@PathVariable String id) {
+    @PutMapping("/news/views/{id}")
+    public ResponseEntity editViews(@PathVariable String id) {
         if (newsService.editViews(id)) {
+            return ResponseEntity.ok(new Result(true, "o'zgartirildi"));
+        }
+        return new ResponseEntity(new Result(false, "o'zgartirilmadi"), HttpStatus.BAD_REQUEST);
+    }
+    @PutMapping("/news/dislike/{id}")
+    public ResponseEntity editDecLikes(@PathVariable String id) {
+        if (newsService.decrementLikes(id)) {
+            return ResponseEntity.ok(new Result(true, "o'zgartirildi"));
+        }
+        return new ResponseEntity(new Result(false, "o'zgartirilmadi"), HttpStatus.BAD_REQUEST);
+    }
+    @PutMapping("/news/like/{id}")
+    public ResponseEntity editIncLikes(@PathVariable String id) {
+        if (newsService.incrementLikes(id)) {
             return ResponseEntity.ok(new Result(true, "o'zgartirildi"));
         }
         return new ResponseEntity(new Result(false, "o'zgartirilmadi"), HttpStatus.BAD_REQUEST);
