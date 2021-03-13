@@ -4,7 +4,9 @@ import com.news.update.entity.Tags;
 
 import java.util.List;
 
+
 public interface TagsService {
+    public boolean create(Tags tags);
     public Tags getOne(String id);
     public List<Tags> getAll();
     public boolean delete(String id);

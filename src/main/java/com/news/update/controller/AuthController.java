@@ -35,7 +35,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginRequest loginVM) {
-        Admins user = adminsRepository.findByUsername(loginVM.getUsername()).get();
+        Admins user = adminsRepository.findByUsername(loginVM.getUsername());
         if (user == null) {
             return new ResponseEntity(new Result(false, "User not available"), BAD_REQUEST);
         }
@@ -55,9 +55,9 @@ public class AuthController {
 
     @GetMapping("/getme")
     public ResponseEntity getUser(HttpServletRequest request) {
-        Admins user = adminsRepository.findByUsername(jwtProvider.getUser(jwtProvider.resolveToken(request))).get();
-        return user != null ? ResponseEntity.ok(new ResultSucces(true, user))
-                : (new ResponseEntity(new Result(false, "token is invalid"), BAD_REQUEST));
+//        userRepo.findByUsername(jwtTokenProvider.getUser(jwtTokenProvider.resolveToken(req)))
+        Admins user = adminsRepository.findByUsername(jwtProvider.getUser(jwtProvider.resolveToken(request)));
+        return user!=null? ResponseEntity.ok(new ResultSucces(true, user)) : (new ResponseEntity(new Result(false, "token is invalid"), BAD_REQUEST));
     }
 
 

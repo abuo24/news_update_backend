@@ -19,7 +19,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public List<Messages> getAll() {
         try {
-            List<Messages> newsList = messageRepository.findAll();
+            List<Messages> newsList = messageRepository.findAllByOrderByCreateAtDesc();
             return newsList;
         } catch (Exception e) {
             System.out.println(e.getMessage());

@@ -1,10 +1,7 @@
 package com.news.update.controller;
 
 
-import com.news.update.entity.Admins;
-import com.news.update.entity.Attachment;
-import com.news.update.entity.Category;
-import com.news.update.entity.News;
+import com.news.update.entity.*;
 import com.news.update.model.Result;
 import com.news.update.model.ResultSucces;
 import com.news.update.payload.*;
@@ -17,10 +14,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @CrossOrigin
 @Controller
@@ -28,7 +35,14 @@ import javax.servlet.http.HttpServletRequest;
 public class AdminsController {
 
     @Autowired
+    AuthenticationManager authenticationManager;
+
+    @Autowired
     private AdminsServiceImpl adminService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     @Autowired
     private CategoryService categoryService;
@@ -52,14 +66,50 @@ public class AdminsController {
     private NewsRepository newsRepository;
 
 
-   @PutMapping("/edit")
+    @PutMapping("/edit")
     public ResponseEntity editAdmin(@RequestBody AdminRequest adminRequest, HttpServletRequest request) {
-        Admins user = adminsRepository.findByUsername(jwtTokenProvider.getUser(jwtTokenProvider.resolveToken(request))).get();
+        try {
+            Admins user = adminsRepository.findByUsername(jwtTokenProvider.getUser(jwtTokenProvider.resolveToken(request)));
 
-        if (adminService.edit(user.getId(), adminRequest)) {
-            return ResponseEntity.ok(new Result(true, "o'zgartirildi"));
+            Admins admins1 = adminService.edit(user.getId(), adminRequest);
+            Map<Object, Object> map = new HashMap<>();
+            String token = "";
+            if (user.getUsername().equals(admins1.getUsername())){
+                token=jwtTokenProvider.resolveToken(request);
+            } else {
+                token = jwtTokenProvider.createToken(admins1.getUsername(), admins1.getRoles());
+            }
+            map.put("succes", true);
+            map.put("username", admins1.getUsername());
+            map.put("token", token);
+
+            return ResponseEntity.ok(map);
+        } catch (
+                Exception e) {
+            return new ResponseEntity(new Result(false, e.getMessage()), BAD_REQUEST);
         }
-        return new ResponseEntity(new Result(false, "o'zgartirilmadi"), HttpStatus.BAD_REQUEST);
+    }
+
+    @PutMapping("/reset")
+    public ResponseEntity editPassword(@RequestBody PasswordRequest adminRequest, HttpServletRequest request) {
+        try {
+            Admins user = adminsRepository.findByUsername(jwtTokenProvider.getUser(jwtTokenProvider.resolveToken(request)));
+
+            String pass = passwordEncoder.encode(adminRequest.getOld_password());
+//            user.getPassword();
+            if (passwordEncoder.matches(adminRequest.getOld_password(),user.getPassword())){
+                Admins admins1 = adminService.editPassword(user.getId(), adminRequest);
+            } else {
+                return new ResponseEntity(new Result(false,"Password xato"), BAD_REQUEST);
+            }
+            Map<Object, Object> map = new HashMap<>();
+            map.put("succes", true);
+            map.put("username", user.getUsername());
+            return ResponseEntity.ok(map);
+        } catch (
+                Exception e) {
+            return new ResponseEntity(new Result(false, e.getMessage()), BAD_REQUEST);
+        }
     }
 
     @GetMapping("/categories")
@@ -92,8 +142,8 @@ public class AdminsController {
     }
 
     @DeleteMapping("/categori/{id}")
-    public ResponseEntity delete(@PathVariable String id) {
-        if (categoryService.delete(id)) {
+    public ResponseEntity delete(@PathVariable String id, @RequestParam String category) {
+        if (categoryService.delete(id, category)) {
             return ResponseEntity.ok(new Result(true, "o'chirildi"));
         }
         return new ResponseEntity(new Result(false, "o'chirilmadi"), HttpStatus.BAD_REQUEST);
@@ -104,19 +154,27 @@ public class AdminsController {
     public ResponseEntity getNews() {
         return ResponseEntity.ok(new ResultSucces(true, newsService.getAll()));
     }
-    @GetMapping("/news/most")
+
+    @GetMapping("/news/likes")
     public ResponseEntity getNewsMostPopular() {
+        return ResponseEntity.ok(new ResultSucces(true,
+                newsService.getAllByPopularLikes()
+        ));
+    }
+
+    @GetMapping("/news/views")
+    public ResponseEntity getNewsMostViews() {
         return ResponseEntity.ok(new ResultSucces(true,
                 newsService.getAllPostsByPopular()
         ));
     }
 
     @GetMapping("/news/{id}")
-    public ResponseEntity getNewsbyId(@PathVariable String id){
-       NewsResponse news = newsService.getOne(id);
-       if (news==null){
-           return ResponseEntity.ok(new Result(false, "post topilmadi"));
-       }
+    public ResponseEntity getNewsbyId(@PathVariable String id) {
+        NewsResponse news = newsService.getOne(id);
+        if (news == null) {
+            return ResponseEntity.ok(new Result(false, "post topilmadi"));
+        }
         return ResponseEntity.ok(new ResultSucces(true, news));
     }
 
@@ -124,19 +182,28 @@ public class AdminsController {
     public ResponseEntity getNewsRelease(
             @PathVariable String categoryid,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
+            @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity.ok(new ResultSucces(true, newsService.getPages(categoryid, page, size)));
     }
 
+    @PostMapping("/news/upload")
+    public ResponseEntity createFile(@RequestParam("file") MultipartFile multipartFile) {
+        System.out.println(multipartFile);
+        String hashId = attachmentService.save(multipartFile);
+        if (hashId!=null){
+            return ResponseEntity.ok(new ResultSucces(true,hashId));
+        }
+        return new ResponseEntity(new Result(false,"saqlanmadi"), BAD_REQUEST);
+      }
+
     @PostMapping("/news/add")
-    public ResponseEntity createNews(NewsRequest newsRequest) {
-        String hashId = attachmentService.save(newsRequest.getFile());
-        Attachment attachment = attachmentService.findByHashId(hashId);
-        if (newsService.create(hashId, newsRequest)) {
+    public ResponseEntity createNews(@RequestBody NewsRequest newsRequest) {
+        if (newsService.create(newsRequest.getHash_id(), newsRequest)) {
             return ResponseEntity.ok(new Result(true, "saqlandi"));
         }
         return new ResponseEntity(new Result(false, "saqlanmadi"), HttpStatus.BAD_REQUEST);
     }
+
 
     @PutMapping("/news/{id}")
     public ResponseEntity editNews(@PathVariable String id, NewsRequest newsRequest) {
@@ -154,6 +221,7 @@ public class AdminsController {
         }
         return new ResponseEntity(new Result(false, "o'zgartirilmadi"), HttpStatus.BAD_REQUEST);
     }
+
     @PutMapping("/news/dislike/{id}")
     public ResponseEntity editDecLikes(@PathVariable String id) {
         if (newsService.decrementLikes(id)) {
@@ -161,6 +229,7 @@ public class AdminsController {
         }
         return new ResponseEntity(new Result(false, "o'zgartirilmadi"), HttpStatus.BAD_REQUEST);
     }
+
     @PutMapping("/news/like/{id}")
     public ResponseEntity editIncLikes(@PathVariable String id) {
         if (newsService.incrementLikes(id)) {
@@ -209,6 +278,15 @@ public class AdminsController {
     @DeleteMapping("/shortnews/{id}")
     public ResponseEntity deleteShortNews(@PathVariable String id) {
         return ResponseEntity.ok(shortNewsServise.delete(id));
+    }
+
+    @GetMapping("/summa")
+    public ResponseEntity getSummaAllNewsLikes() {
+        Map<String, Object> getSumma = new HashMap<>();
+        getSumma.put("likes", newsRepository.getSumma());
+        getSumma.put("views", newsRepository.getSummaViews());
+        getSumma.put("comments", newsRepository.getSummaComments());
+        return ResponseEntity.ok(new ResultSucces(true, getSumma));
     }
 
 }

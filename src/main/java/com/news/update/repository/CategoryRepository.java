@@ -14,7 +14,7 @@ public interface CategoryRepository extends JpaRepository<Category, String> {
     void deleteById(String id);
 
 //        Page<Category> findAll(Pageable pageable);
-//    List<Category> findAllByOrderByIdAsc();
+//    List<News> findAllByOrderByIdAsc();
 //    Page<Category> findByPublished(boolean published, Pageable pageable);
 //    Page<Category> findByTitleContaining (Pageable pageable);
 

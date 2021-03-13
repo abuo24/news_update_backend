@@ -2,9 +2,12 @@ package com.news.update.service;
 
 import com.news.update.entity.Category;
 import com.news.update.entity.News;
+import com.news.update.entity.ShortNews;
 import com.news.update.model.Result;
 import com.news.update.model.ResultSucces;
 import com.news.update.repository.CategoryRepository;
+import com.news.update.repository.NewsRepository;
+import com.news.update.repository.ShortNewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +27,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private NewsRepository newsRepository;
+    @Autowired
+    private ShortNewsRepository shortNewsRepository;
 
     @Override
     public List<Category> getAll() {
@@ -88,9 +96,20 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public boolean delete(String id) {
+    public boolean delete(String id, String category) {
         try {
             if (categoryRepository.findById(id) != null) {
+                Category category1 = categoryRepository.findById(category).get();
+                List<News> newsList = newsRepository.findAllByCategoryId(id);
+                newsList.forEach(item -> {
+                    item.setCategory(categoryRepository.findById(category).get());
+                    newsRepository.save(item);
+                });
+                List<ShortNews> shortNews = shortNewsRepository.findAllByCategoryId(id);
+                shortNews.forEach(item -> {
+                    item.setCategory(categoryRepository.findById(category).get());
+                    shortNewsRepository.save(item);
+                });
                 categoryRepository.deleteById(id);
                 return true;
             } else {

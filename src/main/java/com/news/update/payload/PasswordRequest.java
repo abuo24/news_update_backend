@@ -2,6 +2,7 @@ package com.news.update.payload;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.news.update.entity.Role;
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,14 +15,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class AdminRequest {
+public class PasswordRequest {
 
-    private String fullname;
+    @NotNull
+    private String old_password;
 
-    private String phone;
-
-    private String username;
-
-    private String social;
+    @NotNull
+    private String new_password;
 
 }

@@ -49,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/**").permitAll()
-                .antMatchers("/swagger-ui.html","/api/auth/**", "/api/admin/categories/all", "/api/admin/news/all",
+                .antMatchers("/swagger-ui.html","/api/auth/**","/api/message/**", "/api/admin/categories/all", "/api/admin/news/all",
                         "/api/admin/{categoryid}/shortnews","/api/admin/shortnews",
                         "/api/files/preview/{hashId}","/api/files/download/{hashId}",
                         "/api/comments/{newsid}","/api/comments/{newsid}/all").permitAll()

@@ -1,5 +1,6 @@
 package com.news.update.payload;
 import com.news.update.entity.Category;
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,10 +15,13 @@ import java.util.List;
 @Data
 public class NewsRequest {
 
-    private MultipartFile file;
+    @NotNull
+    private String hash_id;
 
-    private  String Content;
+    @NotNull
+    private  String content;
 
+    @NotNull
     private String title;
 
     private String youtube;
@@ -26,8 +30,10 @@ public class NewsRequest {
 
     private Long viewsCount;
 
+    @NotNull
     private List<String> tags;
 
+    @NotNull
     private String category_id;
 
 }

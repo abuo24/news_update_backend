@@ -19,8 +19,11 @@ import java.util.List;
 public interface NewsRepository extends JpaRepository<News, String> {
     boolean findAllById(String id);
 
-//    List<News> findAll(Sort sort);
+    //    List<News> findAll(Sort sort);
     List<News> findAllByOrderByViewsCountDesc();
+
+    List<News> findAllByOrderByLikesCountDesc();
+
     List<News> findAllByOrderByCreateAtDesc();
 //    findAllByOrderByIdAsc
 
@@ -31,10 +34,23 @@ public interface NewsRepository extends JpaRepository<News, String> {
                     String categoryid,
             Pageable pageable);
 
-//    @Query(value = "select * from public.News where views_count IS Not Null Order by views_count desc")
-//    default List<News> findAllByViewsCountOrderByViewsCountDescNative() {
-//
-//    }
+    List<News> findAllByCategoryId(@Param("categoryid") String categoryid);
+
+//    List<News> findAllOrderByViewsCountDesc();
+
+    @Query(value = "select sum(News.likes_count) from News where News.likes_count is not null",
+            nativeQuery = true
+    )
+    Long getSumma();
+
+    @Query(value = "select sum(News.views_count) from News where News.views_count is not null",
+            nativeQuery = true
+    )
+    Long getSummaViews();
+
+    @Query(value = "select count(comments) from public.Comments",
+            nativeQuery = true)
+    Long getSummaComments();
 
 
 }
