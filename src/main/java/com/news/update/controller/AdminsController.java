@@ -197,7 +197,7 @@ public class AdminsController {
       }
 
     @PostMapping("/news/add")
-    public ResponseEntity createNews(@RequestBody NewsRequest newsRequest) {
+    public ResponseEntity createNews(NewsRequest newsRequest) {
         if (newsService.create(newsRequest.getHash_id(), newsRequest)) {
             return ResponseEntity.ok(new Result(true, "saqlandi"));
         }
@@ -250,7 +250,7 @@ public class AdminsController {
     public ResponseEntity getShortNewsRelease(
             @PathVariable String categoryid,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "2") int size) {
+            @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity.ok(new ResultSucces(true, shortNewsServise.getPages(categoryid, page, size)));
     }
 

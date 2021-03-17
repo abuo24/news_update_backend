@@ -13,7 +13,9 @@
 //import org.springframework.security.crypto.password.PasswordEncoder;
 //import org.springframework.stereotype.Component;
 //
+//import java.util.HashSet;
 //import java.util.List;
+//import java.util.Set;
 //
 //
 //@Component
@@ -47,7 +49,8 @@
 //            admins.setPhone("+998932099924");
 //            admins.setSocial("t.me/yunusjanoff");
 //            roleRepository.save(roleAdmin);
-//            admins.setRoles(roleRepository.findAll());
+//            Set<Role> roles = new HashSet<>(roleRepository.findAll());
+//            admins.setRoles(roles);
 //            adminsRepository.save(admins);
 //        } catch (Exception e) {
 //            System.out.println(e);

@@ -34,6 +34,6 @@ public class MessagesController {
         if (!messageService.getAll().isEmpty()) {
             return ResponseEntity.ok(new ResultSucces(true,messageService.getAll()));
         }
-        return new ResponseEntity(new Result(false, "saqlanmadi"), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(new Result(false, "hozircha xabarlar yo'q"), HttpStatus.BAD_REQUEST);
     }
 }

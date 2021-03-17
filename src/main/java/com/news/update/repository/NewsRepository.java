@@ -27,6 +27,8 @@ public interface NewsRepository extends JpaRepository<News, String> {
     List<News> findAllByOrderByCreateAtDesc();
 //    findAllByOrderByIdAsc
 
+    List<News> findAllByTagsId(String tags_id);
+
     boolean getById(String id);
 
     Page<News> findAllByCategoryIdOrderByCreateAtDesc(
@@ -52,5 +54,6 @@ public interface NewsRepository extends JpaRepository<News, String> {
             nativeQuery = true)
     Long getSummaComments();
 
+    List<News> getAllByHeadAttachmentId(String headAttachment_id);
 
 }

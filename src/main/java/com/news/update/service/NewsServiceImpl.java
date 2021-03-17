@@ -143,12 +143,12 @@ public class NewsServiceImpl implements NewsService {
                 news.setTitle(newsRequest.getTitle());
                 news.setContent(newsRequest.getContent());
                 news.setCategory(categoryRepository.getOne(newsRequest.getCategory_id()));
-                news.setLikesCount(newsRequest.getLikesCount());
-                news.setViewsCount(newsRequest.getViewsCount());
+                news.setLikesCount(newsService1.get().getLikesCount());
+                news.setViewsCount(newsService1.get().getViewsCount());
                 news.setId(id);
                 news.setTags(tagsRepository.findAllById(newsRequest.getTags()));
                 news.setCreateAt(newsService1.get().getCreateAt());
-                news.setHeadAttachment(attachmentService.findByHashId(id));
+                news.setHeadAttachment(attachmentService.findByHashId(newsRequest.getHash_id()));
                 if (newsRepository.save(news) != null) {
                     return true;
                 }
@@ -215,16 +215,23 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public boolean delete(String id) {
-        try {
-            if (newsRepository.findById(id).get() != null) {
-                if (newsRepository.findById(id).get().getHeadAttachment() != null) {
-                    attachmentService.delete(newsRepository.findById(id).get().getHeadAttachment().getHashId());
-                }
+        try {News news = newsRepository.findById(id).get();
+            if ( news!= null) {
+                news.setTags(null);
+                System.out.println("TEST 1 - "+news);
                 List<Comments> comments = commentsRepository.findAllByNewsIdOrderByCreateAtDesc(id);
                 if (comments != null) {
                     commentsRepository.deleteAll(comments);
                 }
+//                if (news.getHeadAttachment() != null) {
+//                    attachmentService.delete(newsRepository.findById(id).get().getHeadAttachment().getHashId());
+//                }
+                System.out.println("TEST 2 - "+news);
+                news.setHeadAttachment(null);
+                System.out.println("TEST 3 - "+news);
+                System.out.println(comments);
                 newsRepository.deleteById(id);
+                System.out.println(news);
                 return true;
             } else {
                 return false;

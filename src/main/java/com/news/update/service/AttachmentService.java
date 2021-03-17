@@ -1,7 +1,9 @@
 package com.news.update.service;
 
 import com.news.update.entity.Attachment;
+import com.news.update.entity.News;
 import com.news.update.repository.AttachmentRepository;
+import com.news.update.repository.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,6 +21,8 @@ import java.util.UUID;
 public class AttachmentService {
     @Autowired
     private AttachmentRepository attachmentRepository;
+    @Autowired
+    private NewsRepository newsRepository;
 
     @Value("${upload.folder}")
     private String uploadFolder;
@@ -82,4 +86,7 @@ public class AttachmentService {
         }
         return ext;
     }
+
+
+
 }

@@ -4,6 +4,7 @@ import com.news.update.entity.Messages;
 import com.news.update.entity.Tags;
 import com.news.update.model.Result;
 import com.news.update.model.ResultSucces;
+import com.news.update.repository.NewsRepository;
 import com.news.update.service.MessageService;
 import com.news.update.service.TagsService;
 import org.springframework.beans.factory.annotation.Autowired;

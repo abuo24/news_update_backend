@@ -26,10 +26,6 @@ public class NewsRequest {
 
     private String youtube;
 
-    private Long likesCount;
-
-    private Long viewsCount;
-
     @NotNull
     private List<String> tags;
 
