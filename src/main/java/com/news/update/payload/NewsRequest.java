@@ -19,10 +19,16 @@ public class NewsRequest {
     private String hash_id;
 
     @NotNull
-    private  String content;
+    private  String contentUz;
 
     @NotNull
-    private String title;
+    private  String contentRu;
+
+    @NotNull
+    private String titleUz;
+
+    @NotNull
+    private String titleRu;
 
     private String youtube;
 

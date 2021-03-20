@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class PostRequestLikesAndViews {
 
-    private  Long likes;
+    private Long likes;
 
     private Long views;
 

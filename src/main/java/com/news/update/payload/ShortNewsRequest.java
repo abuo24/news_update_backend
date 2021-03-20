@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class ShortNewsRequest {
-    private String title;
+    private String titleUz;
+    private String titleRu;
     private String category_id;
 }

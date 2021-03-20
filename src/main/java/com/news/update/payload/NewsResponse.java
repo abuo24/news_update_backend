@@ -20,9 +20,11 @@ public class NewsResponse {
 
     private String id;
 
-    private  String Content;
+    private  String contentUz;
+    private  String contentRu;
 
-    private String title;
+    private String titleUz;
+    private String titleRu;
 
     private Attachment headAttachment;
 

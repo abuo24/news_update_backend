@@ -44,7 +44,8 @@ public class ShortNewsServiceImpl implements ShortNewsServise {
         try {
             ShortNews shortNews = new ShortNews();
             shortNews.setCategory(categoryRepository.getOne(shortNewsRequest.getCategory_id()));
-            shortNews.setTitle(shortNewsRequest.getTitle());
+            shortNews.setTitleUz(shortNewsRequest.getTitleUz());
+            shortNews.setTitleRu(shortNewsRequest.getTitleRu());
             if (shortNewsRepository.save(shortNews) != null) {
                 return true;
             }
@@ -60,7 +61,8 @@ public class ShortNewsServiceImpl implements ShortNewsServise {
             Optional<ShortNews> shortNews = shortNewsRepository.findById(id);
             if (shortNews != null) {
                 ShortNews news = new ShortNews();
-                news.setTitle(shortNewsRequest.getTitle());
+                news.setTitleUz(shortNewsRequest.getTitleUz());
+                news.setTitleRu(shortNewsRequest.getTitleRu());
                 news.setId(id);
                 news.setCategory(categoryRepository.getOne(shortNewsRequest.getCategory_id()));
                 news.setCreateAt(shortNews.get().getCreateAt());

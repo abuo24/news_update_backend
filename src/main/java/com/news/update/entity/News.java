@@ -25,9 +25,16 @@ public class News implements Serializable {
     @GeneratedValue(generator = "uuid")
     private String id;
     @Column(nullable = false)
-    private String Content;
+
+    private String contentUz;
     @Column(nullable = false)
-    private String title;
+    private String contentRu;
+
+    @Column(nullable = false)
+    private String titleUz;
+
+    @Column(nullable = false)
+    private String titleRu;
 
     @OneToOne
     private Attachment headAttachment;

@@ -23,6 +23,9 @@ public class Tags implements Serializable {
     private String id;
 
     @Column(nullable = false)
-    private String tag;
+    private String tagUz;
+
+    @Column(nullable = false)
+    private String tagRu;
 
 }

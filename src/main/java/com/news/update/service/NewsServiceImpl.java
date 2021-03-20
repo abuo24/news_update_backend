@@ -42,7 +42,7 @@ public class NewsServiceImpl implements NewsService {
     public NewsResponse getOne(String id) {
         News news = newsRepository.findById(id).get();
         List<Comments> comments = commentsRepository.findAllByNewsIdOrderByCreateAtDesc(news.getId());
-        NewsResponse newsResponse = new NewsResponse(news.getId(), news.getContent(), news.getTitle(), news.getHeadAttachment(), news.getYoutube(), news.getLikesCount(), news.getViewsCount(), news.getCategory(), news.getTags(), comments, news.getCreateAt());
+        NewsResponse newsResponse = new NewsResponse(news.getId(), news.getContentUz(), news.getContentRu(), news.getTitleUz(), news.getTitleRu(), news.getHeadAttachment(), news.getYoutube(), news.getLikesCount(), news.getViewsCount(), news.getCategory(), news.getTags(), comments, news.getCreateAt());
         if (news == null) {
             return null;
         }
@@ -60,7 +60,7 @@ public class NewsServiceImpl implements NewsService {
                 comments = new ArrayList<>();
                 newsResponse = new NewsResponse();
                 comments = commentsRepository.findAllByNewsIdOrderByCreateAtDesc(newsList.get(i).getId());
-                newsResponse = new NewsResponse(newsList.get(i).getId(), newsList.get(i).getContent(), newsList.get(i).getTitle(), newsList.get(i).getHeadAttachment(), newsList.get(i).getYoutube(), newsList.get(i).getLikesCount(), newsList.get(i).getViewsCount(), newsList.get(i).getCategory(), newsList.get(i).getTags(), comments, newsList.get(i).getCreateAt());
+                newsResponse = new NewsResponse(newsList.get(i).getId(), newsList.get(i).getContentUz(), newsList.get(i).getContentRu(), newsList.get(i).getTitleUz(), newsList.get(i).getTitleRu(), newsList.get(i).getHeadAttachment(), newsList.get(i).getYoutube(), newsList.get(i).getLikesCount(), newsList.get(i).getViewsCount(), newsList.get(i).getCategory(), newsList.get(i).getTags(), comments, newsList.get(i).getCreateAt());
                 newsResponses.add(newsResponse);
             }
             return newsResponses;
@@ -81,7 +81,7 @@ public class NewsServiceImpl implements NewsService {
                 comments = new ArrayList<>();
                 newsResponse = new NewsResponse();
                 comments = commentsRepository.findAllByNewsIdOrderByCreateAtDesc(newsList.get(i).getId());
-                newsResponse = new NewsResponse(newsList.get(i).getId(), newsList.get(i).getContent(), newsList.get(i).getTitle(), newsList.get(i).getHeadAttachment(), newsList.get(i).getYoutube(), newsList.get(i).getLikesCount(), newsList.get(i).getViewsCount(), newsList.get(i).getCategory(), newsList.get(i).getTags(), comments, newsList.get(i).getCreateAt());
+                newsResponse = new NewsResponse(newsList.get(i).getId(), newsList.get(i).getContentUz(), newsList.get(i).getContentRu(), newsList.get(i).getTitleUz(), newsList.get(i).getTitleRu(), newsList.get(i).getHeadAttachment(), newsList.get(i).getYoutube(), newsList.get(i).getLikesCount(), newsList.get(i).getViewsCount(), newsList.get(i).getCategory(), newsList.get(i).getTags(), comments, newsList.get(i).getCreateAt());
                 newsResponses.add(newsResponse);
             }
             return newsResponses;
@@ -102,7 +102,7 @@ public class NewsServiceImpl implements NewsService {
                 comments = new ArrayList<>();
                 newsResponse = new NewsResponse();
                 comments = commentsRepository.findAllByNewsIdOrderByCreateAtDesc(newsList.get(i).getId());
-                newsResponse = new NewsResponse(newsList.get(i).getId(), newsList.get(i).getContent(), newsList.get(i).getTitle(), newsList.get(i).getHeadAttachment(), newsList.get(i).getYoutube(), newsList.get(i).getLikesCount(), newsList.get(i).getViewsCount(), newsList.get(i).getCategory(), newsList.get(i).getTags(), comments, newsList.get(i).getCreateAt());
+                newsResponse = new NewsResponse(newsList.get(i).getId(),  newsList.get(i).getContentUz(), newsList.get(i).getContentRu(), newsList.get(i).getTitleUz(), newsList.get(i).getTitleRu(), newsList.get(i).getHeadAttachment(), newsList.get(i).getYoutube(), newsList.get(i).getLikesCount(), newsList.get(i).getViewsCount(), newsList.get(i).getCategory(), newsList.get(i).getTags(), comments, newsList.get(i).getCreateAt());
                 newsResponses.add(newsResponse);
             }
             return newsResponses;
@@ -117,8 +117,10 @@ public class NewsServiceImpl implements NewsService {
         try {
             News news = new News();
             news.setCategory(categoryRepository.getOne(newsRequest.getCategory_id()));
-            news.setContent(newsRequest.getContent());
-            news.setTitle(newsRequest.getTitle());
+            news.setContentUz(newsRequest.getContentUz());
+            news.setContentRu(newsRequest.getContentRu());
+            news.setTitleUz(newsRequest.getTitleUz());
+            news.setTitleRu(newsRequest.getTitleRu());
             news.setTags(tagsRepository.findAllById(newsRequest.getTags()));
             if (attachmentService.findByHashId(hashId) != null) {
                 news.setHeadAttachment(attachmentService.findByHashId(hashId));
@@ -140,8 +142,10 @@ public class NewsServiceImpl implements NewsService {
             Optional<News> newsService1 = newsRepository.findById(id);
             if (newsService1.get() != null) {
                 News news = new News();
-                news.setTitle(newsRequest.getTitle());
-                news.setContent(newsRequest.getContent());
+                news.setTitleUz(newsRequest.getTitleUz());
+                news.setTitleRu(newsRequest.getTitleRu());
+                news.setContentUz(newsRequest.getContentUz());
+                news.setContentRu(newsRequest.getContentRu());
                 news.setCategory(categoryRepository.getOne(newsRequest.getCategory_id()));
                 news.setLikesCount(newsService1.get().getLikesCount());
                 news.setViewsCount(newsService1.get().getViewsCount());
@@ -223,9 +227,6 @@ public class NewsServiceImpl implements NewsService {
                 if (comments != null) {
                     commentsRepository.deleteAll(comments);
                 }
-//                if (news.getHeadAttachment() != null) {
-//                    attachmentService.delete(newsRepository.findById(id).get().getHeadAttachment().getHashId());
-//                }
                 System.out.println("TEST 2 - "+news);
                 news.setHeadAttachment(null);
                 System.out.println("TEST 3 - "+news);
@@ -257,7 +258,7 @@ public class NewsServiceImpl implements NewsService {
                 comments = new ArrayList<>();
                 newsResponse = new NewsResponse();
                 comments = commentsRepository.findAllByNewsIdOrderByCreateAtDesc(tutorials.get(i).getId());
-                newsResponse = new NewsResponse(tutorials.get(i).getId(), tutorials.get(i).getContent(), tutorials.get(i).getTitle(), tutorials.get(i).getHeadAttachment(), tutorials.get(i).getYoutube(), tutorials.get(i).getLikesCount(), tutorials.get(i).getViewsCount(), tutorials.get(i).getCategory(), tutorials.get(i).getTags(), comments, tutorials.get(i).getCreateAt());
+                newsResponse = new NewsResponse(tutorials.get(i).getId(), tutorials.get(i).getContentUz(),tutorials.get(i).getContentRu(), tutorials.get(i).getTitleUz(), tutorials.get(i).getTitleRu(), tutorials.get(i).getHeadAttachment(), tutorials.get(i).getYoutube(), tutorials.get(i).getLikesCount(), tutorials.get(i).getViewsCount(), tutorials.get(i).getCategory(), tutorials.get(i).getTags(), comments, tutorials.get(i).getCreateAt());
                 newsResponses.add(newsResponse);
             }
 

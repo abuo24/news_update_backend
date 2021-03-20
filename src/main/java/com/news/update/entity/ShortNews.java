@@ -26,7 +26,9 @@ public class ShortNews implements Serializable {
     private String id;
 
     @Column(nullable = false)
-    private String title;
+    private String titleUz;
+    @Column(nullable = false)
+    private String titleRu;
 
     @ManyToOne
     private Category category;

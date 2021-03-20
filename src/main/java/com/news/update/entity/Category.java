@@ -24,7 +24,9 @@ public class Category implements Serializable {
     @GeneratedValue(generator = "uuid")
     private String id;
     @Column(nullable = false)
-    private String name;
+    private String nameUz;
+    @Column(nullable = false)
+    private String nameRu;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(nullable = false, updatable = false)
