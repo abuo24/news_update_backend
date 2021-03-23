@@ -21,7 +21,6 @@ public class MessagesController {
 
     @PostMapping("/add")
     public ResponseEntity create(@RequestBody Messages messages){
-
         if (messageService.create(messages)) {
             return ResponseEntity.ok(new Result(true, "saqlandi"));
         }
@@ -30,7 +29,6 @@ public class MessagesController {
 
     @GetMapping("/all")
     public ResponseEntity getAll(){
-
         if (!messageService.getAll().isEmpty()) {
             return ResponseEntity.ok(new ResultSucces(true,messageService.getAll()));
         }

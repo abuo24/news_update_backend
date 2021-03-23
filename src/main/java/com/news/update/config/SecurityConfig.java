@@ -48,12 +48,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/**").permitAll()
-                .antMatchers("/swagger-ui.html","/api/auth/**","/api/message/**", "/api/admin/categories/all", "/api/admin/news/all",
-                        "/api/admin/{categoryid}/shortnews","/api/admin/shortnews",
+//                .antMatchers("/**").permitAll()
+                .antMatchers(
+//                        "/swagger-ui.html",
+                        "/api/auth/**","/api/message/**", "/api/admin/categories",
+                        "/api/admin/categories/all",  "/api/admin/news/like/{id}",
+                        "/api/admin/news/dislike/{id}", "/api/admin/news/likes", "/api/admin/news/views",
+                        "/api/admin/news/views/{id}",  "/api/admin/news/all",
+                        "/api/admin/{categoryid}/**","/api/admin/{categoryid}/shortnews/","/api/admin/{categoryid}/news","/api/admin/shortnews",
                         "/api/files/preview/{hashId}","/api/files/download/{hashId}",
-                        "/api/comments/{newsid}","/api/comments/{newsid}/all").permitAll()
-                .antMatchers("/api/admin/**","/api/files/**","/api/comments/**").hasAnyAuthority("ROLE_ADMIN")
+                        "/api/comments/{newsid}","/api/comments/{newsid}/all",
+                        "/api/comments/{newsid}/all","/api/files/download/{hashId}",
+                        "/api/files/preview/{hashId}","/api/files/all",
+                        "/api/auth/**","/api/videonews","/api/tags/all").permitAll()
+                .antMatchers("/api/**","/api/admin/*","/api/admin/**","/api/tags/**").hasAnyAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));
