@@ -15,6 +15,4 @@ import java.util.Optional;
 @Repository
 public interface TagsRepository extends JpaRepository<Tags, String> {
 
-//    List<Tags> findTagsByNewsId(@Param("news_id") String news_id);
-
 }
