@@ -30,8 +30,6 @@ public class NewsRequest {
     @NotNull
     private String titleRu;
 
-    private String youtube;
-
     @NotNull
     private List<String> tags;
 

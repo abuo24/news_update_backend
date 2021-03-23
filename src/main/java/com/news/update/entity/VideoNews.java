@@ -19,16 +19,14 @@ import java.util.List;
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table
-public class News implements Serializable {
+public class VideoNews implements Serializable {
     @Id
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @GeneratedValue(generator = "uuid")
     private String id;
-    @Column(nullable = false)
 
-    private String contentUz;
     @Column(nullable = false)
-    private String contentRu;
+    private String link;
 
     @Column(nullable = false)
     private String titleUz;
@@ -36,18 +34,6 @@ public class News implements Serializable {
     @Column(nullable = false)
     private String titleRu;
 
-    @OneToOne
-    private Attachment headAttachment;
-
-    private Long likesCount;
-
-    private Long viewsCount;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Category category;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<Tags> tags;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(nullable = false, updatable = false)

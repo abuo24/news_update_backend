@@ -28,7 +28,6 @@ public class NewsResponse {
 
     private Attachment headAttachment;
 
-    private String youtube;
 
     private Long likesCount;
 
