@@ -36,7 +36,7 @@ public class CommentsServiceImpl implements CommentsService {
             comments.setAuthorMail(commentsRequest.getAuthorMail());
             if (newsRepository.findById(id).get() != null) {
                 comments.setNews(newsRepository.findById(id).get());
-               if (commentsRequest.getComments_id() != null && commentsRepository.findById(commentsRequest.getComments_id()).get() != null) {
+                if (commentsRequest.getComments_id() != null && commentsRepository.findById(commentsRequest.getComments_id()).get() != null) {
                     comments.setComments(commentsRepository.findById(commentsRequest.getComments_id()).get());
                 }
                 Comments comments1 = commentsRepository.save(comments);
@@ -74,7 +74,18 @@ public class CommentsServiceImpl implements CommentsService {
     @Override
     public boolean delete(String id) {
         try {
-            if (commentsRepository.findById(id) != null) {
+            Optional<Comments> comments = commentsRepository.findById(id);
+
+            if (comments.get()!=null) {
+                List<Comments> commentsList = commentsRepository.findAllByComments_Id(id);
+                if (!commentsList.isEmpty()) {
+                    for (Comments c : commentsList) {
+                        c.setComments(null);
+                        commentsRepository.save(c);
+                    }
+                }
+                comments.get().setComments(null);
+
                 commentsRepository.deleteById(id);
                 return true;
             } else {

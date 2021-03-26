@@ -1,9 +1,9 @@
 package com.news.update.payload;
 import com.news.update.entity.Category;
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,25 +15,29 @@ import java.util.List;
 @Data
 public class NewsRequest {
 
-    @NotNull
+    @NonNull
     private String hash_id;
 
-    @NotNull
+    @NonNull
     private  String contentUz;
 
-    @NotNull
+    @NonNull
     private  String contentRu;
 
-    @NotNull
+
+    @NonNull
     private String titleUz;
 
-    @NotNull
+
+    @NonNull
     private String titleRu;
 
-    @NotNull
+
+    @NonNull
     private List<String> tags;
 
-    @NotNull
+
+    @NonNull
     private String category_id;
 
 }

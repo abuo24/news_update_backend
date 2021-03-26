@@ -25,7 +25,7 @@ public class Schedule {
     @Autowired
     private NewsService newsService;
 
-    @Scheduled(cron = "0 0 * * * ?")
+    @Scheduled(cron = "25 11 * * * ?")
     public void scheduleTaskUsingCronExpression() {
 
         List<Attachment> getAll = attachmentRepository.findAll();

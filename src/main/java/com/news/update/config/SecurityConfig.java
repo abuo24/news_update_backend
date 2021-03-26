@@ -60,8 +60,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/comments/{newsid}","/api/comments/{newsid}/all",
                         "/api/comments/{newsid}/all","/api/files/download/{hashId}",
                         "/api/files/preview/{hashId}","/api/files/all",
-                        "/api/auth/**","/api/videonews","/api/tags/all").permitAll()
-                .antMatchers("/api/**","/api/admin/*","/api/admin/**","/api/tags/**").hasAnyAuthority("ROLE_ADMIN")
+                        "/api/auth/**","/api/videonews","/api/videonews/all","/api/tags/all").permitAll()
+                .antMatchers("/api/**","/api/admin/*","/api/admin/**","/api/videonews/*","/api/tags/**","/api/message/**").hasAnyAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));

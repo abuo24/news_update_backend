@@ -16,5 +16,8 @@ public interface CommentsRepository extends JpaRepository< Comments, String> {
     List<Comments> findAllByNewsIdOrderByCreateAtDesc(
             @Param("newsid")
                     String newsid);
+    List<Comments> findAllByComments_Id(
+            @Param("id")
+                    String id);
 
 }
