@@ -44,7 +44,7 @@ public class Admins implements Serializable {
 
     @Column(nullable = false)
     private String phone;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd HH:mm:ss",timezone = "Asia/Tashkent")
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private Date createAt;

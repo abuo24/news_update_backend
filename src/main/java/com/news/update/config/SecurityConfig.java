@@ -48,9 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-//                .antMatchers("/**").permitAll()
                 .antMatchers(
-//                        "/swagger-ui.html",
                         "/api/auth/**","/api/message/**", "/api/admin/categories",
                         "/api/admin/categories/all",  "/api/admin/news/like/{id}",
                         "/api/admin/news/dislike/{id}", "/api/admin/news/likes", "/api/admin/news/views",
@@ -59,9 +57,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/files/preview/{hashId}","/api/files/download/{hashId}",
                         "/api/comments/{newsid}","/api/comments/{newsid}/all",
                         "/api/comments/{newsid}/all","/api/files/download/{hashId}",
-                        "/api/files/preview/{hashId}","/api/files/all",
+                        "/api/files/preview/{hashId}","/api/files/all","/api/message/add",
                         "/api/auth/**","/api/videonews","/api/videonews/all","/api/tags/all").permitAll()
-                .antMatchers("/api/**","/api/admin/*","/api/admin/**","/api/videonews/*","/api/tags/**","/api/message/**").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/api/**","/api/admin/*","/api/admin/**","/api/videonews/*","/api/tags/**","/api/message/all","/api/admin/news/add").hasAnyAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));

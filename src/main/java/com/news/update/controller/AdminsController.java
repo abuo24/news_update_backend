@@ -9,10 +9,10 @@ import com.news.update.repository.AdminsRepository;
 import com.news.update.repository.NewsRepository;
 import com.news.update.security.JwtTokenProvider;
 import com.news.update.service.*;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -74,8 +74,8 @@ public class AdminsController {
             Admins admins1 = adminService.edit(user.getId(), adminRequest);
             Map<Object, Object> map = new HashMap<>();
             String token = "";
-            if (user.getUsername().equals(admins1.getUsername())){
-                token=jwtTokenProvider.resolveToken(request);
+            if (user.getUsername().equals(admins1.getUsername())) {
+                token = jwtTokenProvider.resolveToken(request);
             } else {
                 token = jwtTokenProvider.createToken(admins1.getUsername(), admins1.getRoles());
             }
@@ -97,10 +97,10 @@ public class AdminsController {
 
             String pass = passwordEncoder.encode(adminRequest.getOld_password());
 //            user.getPassword();
-            if (passwordEncoder.matches(adminRequest.getOld_password(),user.getPassword())){
+            if (passwordEncoder.matches(adminRequest.getOld_password(), user.getPassword())) {
                 Admins admins1 = adminService.editPassword(user.getId(), adminRequest);
             } else {
-                return new ResponseEntity(new Result(false,"Password xato"), BAD_REQUEST);
+                return new ResponseEntity(new Result(false, "Password xato"), BAD_REQUEST);
             }
             Map<Object, Object> map = new HashMap<>();
             map.put("succes", true);
@@ -190,19 +190,31 @@ public class AdminsController {
     public ResponseEntity createFile(@RequestParam("file") MultipartFile multipartFile) {
         System.out.println(multipartFile);
         String hashId = attachmentService.save(multipartFile);
-        if (hashId!=null){
-            return ResponseEntity.ok(new ResultSucces(true,hashId));
+        if (hashId != null) {
+            return ResponseEntity.ok(new ResultSucces(true, hashId));
         }
-        return new ResponseEntity(new Result(false,"saqlanmadi"), BAD_REQUEST);
-      }
+        return new ResponseEntity(new Result(false, "saqlanmadi"), BAD_REQUEST);
+    }
 
     @PostMapping("/news/add")
-    public ResponseEntity createNews(NewsRequest newsRequest) {
-        if (newsService.create(newsRequest.getHash_id(), newsRequest)) {
-            return ResponseEntity.ok(new Result(true, "saqlandi"));
+    public ResponseEntity createNews( NewsRequest newsRequest) {
+        System.out.println(newsRequest);
+        if (newsRequest.getHash_id() != null) {
+            if (newsService.create(newsRequest.getHash_id(), newsRequest)) {
+                return ResponseEntity.ok(new Result(true, "saqlandi"));
+            }
         }
         return new ResponseEntity(new Result(false, "saqlanmadi"), HttpStatus.BAD_REQUEST);
     }
+
+//
+//    @PostMapping(value = "/news/content",consumes = "text/html")
+//    public ResponseEntity createContent(String contentUz,String contentRu) {
+//        if (newsService.create(newsRequest.getHash_id(), newsRequest)) {
+//            return ResponseEntity.ok(new Result(true, "saqlandi"));
+//        }
+//        return new ResponseEntity(new Result(false, "saqlanmadi"), HttpStatus.BAD_REQUEST);
+//    }
 
 
     @PutMapping("/news/{id}")

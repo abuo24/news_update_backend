@@ -41,7 +41,7 @@ public class Comments implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private News news;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd HH:mm:ss",timezone = "Asia/Tashkent")
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private Date createAt;

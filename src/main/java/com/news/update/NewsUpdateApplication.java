@@ -20,14 +20,10 @@ import java.util.List;
 
 @SpringBootApplication
 @EnableScheduling
-//@ComponentScan(basePackages = "com.news.update")
 @PropertySource("classpath:application.properties")
 public class NewsUpdateApplication {
-
-
     public static void main(String[] args) {
 
         SpringApplication.run(NewsUpdateApplication.class, args);
     }
-
 }

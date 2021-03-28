@@ -24,10 +24,10 @@ public class News implements Serializable {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @GeneratedValue(generator = "uuid")
     private String id;
-    @Column(nullable = false)
+    @Column(nullable = false,length = 10000)
 
     private String contentUz;
-    @Column(nullable = false)
+    @Column(nullable = false,length = 10000)
     private String contentRu;
 
     @Column(nullable = false)
@@ -49,7 +49,7 @@ public class News implements Serializable {
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Tags> tags;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd HH:mm:ss",timezone = "Asia/Tashkent")
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private Date createAt;

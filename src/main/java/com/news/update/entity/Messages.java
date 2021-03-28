@@ -35,7 +35,7 @@ public class Messages implements Serializable {
     @Column(nullable = false)
     private String lastName;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd HH:mm:ss",timezone = "Asia/Tashkent")
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private Date createAt;

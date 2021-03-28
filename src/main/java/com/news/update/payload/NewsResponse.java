@@ -39,7 +39,7 @@ public class NewsResponse {
 
     private List<Comments> comments;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd HH:mm:ss",timezone = "Asia/Tashkent")
     private Date createAt;
 
 }

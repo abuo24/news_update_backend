@@ -25,17 +25,20 @@ public class Schedule {
     @Autowired
     private NewsService newsService;
 
-    @Scheduled(cron = "25 11 * * * ?")
+    @Scheduled(cron = "0 0 * * * ?")
     public void scheduleTaskUsingCronExpression() {
-
+        System.out.println("TEST 1\n");
         List<Attachment> getAll = attachmentRepository.findAll();
         getAll.forEach(item -> {
+            System.out.println("item 1 \n+"+item);
+
                     List<News> newsList = newsRepository.getAllByHeadAttachmentId(item.getId());
                     if (newsList.isEmpty()) {
+                        System.out.println("test " +newsList);
+
                         attachmentService.delete(item.getHashId());
                     }
                 }
         );
     }
-
 }
