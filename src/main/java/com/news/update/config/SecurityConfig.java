@@ -57,8 +57,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/files/preview/{hashId}","/api/files/download/{hashId}",
                         "/api/comments/{newsid}","/api/comments/{newsid}/all",
                         "/api/comments/{newsid}/all","/api/files/download/{hashId}",
-                        "/api/files/preview/{hashId}","/api/files/all","/api/message/add",
-                        "/api/auth/**","/api/videonews","/api/videonews/all","/api/tags/all").permitAll()
+                        "/api/files/all","/api/message/add",
+                        "/api/auth/**","/api/videonews","/api/videonews/all","/api/tags/all","/api/files/preview/*").permitAll()
                 .antMatchers("/api/**","/api/admin/*","/api/admin/**","/api/videonews/*","/api/tags/**","/api/message/all","/api/admin/news/add").hasAnyAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and()

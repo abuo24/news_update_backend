@@ -207,15 +207,6 @@ public class AdminsController {
         return new ResponseEntity(new Result(false, "saqlanmadi"), HttpStatus.BAD_REQUEST);
     }
 
-//
-//    @PostMapping(value = "/news/content",consumes = "text/html")
-//    public ResponseEntity createContent(String contentUz,String contentRu) {
-//        if (newsService.create(newsRequest.getHash_id(), newsRequest)) {
-//            return ResponseEntity.ok(new Result(true, "saqlandi"));
-//        }
-//        return new ResponseEntity(new Result(false, "saqlanmadi"), HttpStatus.BAD_REQUEST);
-//    }
-
 
     @PutMapping("/news/{id}")
     public ResponseEntity editNews(@PathVariable String id, NewsRequest newsRequest) {

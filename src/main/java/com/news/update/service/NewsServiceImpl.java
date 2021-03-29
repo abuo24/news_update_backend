@@ -236,10 +236,7 @@ public class NewsServiceImpl implements NewsService {
                 }
                 System.out.println("TEST 2 - " + news);
                 news.setHeadAttachment(null);
-                System.out.println("TEST 3 - " + news);
-                System.out.println(comments);
                 newsRepository.deleteById(id);
-                System.out.println(news);
                 return true;
             } else {
                 return false;
@@ -257,7 +254,6 @@ public class NewsServiceImpl implements NewsService {
             Pageable paging = PageRequest.of(page, size);
             Page<News> pageTuts = newsRepository.findAllByCategoryIdOrderByCreateAtDesc(categoryid, paging);
             tutorials = pageTuts.getContent();
-            System.out.println(tutorials);
             NewsResponse newsResponse = null;
             List<Comments> comments = null;
             List<NewsResponse> newsResponses = new ArrayList<>();

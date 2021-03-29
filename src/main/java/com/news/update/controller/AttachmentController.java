@@ -72,7 +72,7 @@ public class AttachmentController {
             String fileDownloadUri = ServletUriComponentsBuilder
                     .fromCurrentContextPath()
                     .path("api/files/preview/")
-                    .path(dbFile.getId())
+                    .path(dbFile.getHashId())
                     .toUriString();
 
             return new FileResponse(
