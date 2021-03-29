@@ -1,6 +1,7 @@
 package com.news.update.controller;
 
 import com.news.update.entity.Attachment;
+import com.news.update.model.ResultSucces;
 import com.news.update.payload.FileResponse;
 import com.news.update.repository.AttachmentRepository;
 import com.news.update.service.AttachmentService;
@@ -79,11 +80,16 @@ public class AttachmentController {
                     dbFile.getName(),
                     fileDownloadUri,
                     dbFile.getContentType(),
+                    dbFile.getCreateAt(),
                     dbFile.getFileSize());
         }).collect(Collectors.toList());
-
         return ResponseEntity.status(HttpStatus.OK).body(files);
     }
 
-
+    @GetMapping("/files")
+    public ResponseEntity getShortNewsRelease(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size) {
+        return ResponseEntity.ok(new ResultSucces(true, attachmentService.getPages(page, size)));
+    }
 }

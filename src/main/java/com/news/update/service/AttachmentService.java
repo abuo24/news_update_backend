@@ -1,21 +1,27 @@
 package com.news.update.service;
 
 import com.news.update.entity.Attachment;
+import com.news.update.entity.Category;
 import com.news.update.entity.News;
+import com.news.update.payload.FileResponse;
 import com.news.update.repository.AttachmentRepository;
 import com.news.update.repository.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AttachmentService {
@@ -87,6 +93,41 @@ public class AttachmentService {
         return ext;
     }
 
+    public Map getPages(int page, int size){
+
+        try {
+            List<Attachment> tutorials = new ArrayList<Attachment>();
+            Pageable paging = PageRequest.of(page, size, Sort.by("createAt").descending());
+
+            Page<Attachment> pageTuts = attachmentRepository.findAll(paging);
+            tutorials = pageTuts.getContent();
+
+            List<FileResponse> files = tutorials.stream().map(dbFile -> {
+                String fileDownloadUri = ServletUriComponentsBuilder
+                        .fromCurrentContextPath()
+                        .path("api/files/preview/")
+                        .path(dbFile.getHashId())
+                        .toUriString();
+
+                return new FileResponse(
+                        dbFile.getName(),
+                        fileDownloadUri,
+                        dbFile.getContentType(),
+                        dbFile.getCreateAt(),
+                        dbFile.getFileSize());
+            }).collect(Collectors.toList());
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("files", files);
+            response.put("currentPage", pageTuts.getNumber());
+            response.put("totalItems", pageTuts.getTotalElements());
+            response.put("totalPages", pageTuts.getTotalPages());
+
+            return response;
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
 
 }
