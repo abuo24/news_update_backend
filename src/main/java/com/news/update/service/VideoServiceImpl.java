@@ -54,7 +54,6 @@ public class VideoServiceImpl implements VideoService {
     public boolean create(VideoRequest videoRequest) {
         try {
             VideoNews news = new VideoNews();
-//            news.setCategory(categoryRepository.getOne(videoRequest.getCategory_id()));
             news.setLink(videoRequest.getLink());
             news.setTitleRu(videoRequest.getTitleRu());
             news.setTitleUz(videoRequest.getTitleUz());
