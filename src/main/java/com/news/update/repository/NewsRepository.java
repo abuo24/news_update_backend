@@ -36,6 +36,9 @@ public interface NewsRepository extends JpaRepository<News, String> {
                     String categoryid,
             Pageable pageable);
 
+    Page<News> findAllByOrderByCreateAtDesc(
+            Pageable pageable);
+
     List<News> findAllByCategoryId(@Param("categoryid") String categoryid);
 
 //    List<News> findAllOrderByViewsCountDesc();

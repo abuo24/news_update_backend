@@ -14,12 +14,14 @@ public interface VideoService {
 
     public List<VideoNews> getAll();
 
+    public Map getPages(int page, int size);
+
     public boolean create(VideoRequest newsRequest);
 
     public boolean edit(String id, VideoRequest newsRequest);
 
     public boolean delete(String id);
-
-    public Map getPages(int page, int size);
+//
+//    public Map getPages(int page, int size);
 
 }

@@ -113,7 +113,7 @@ public class VideoServiceImpl implements VideoService {
             Page<VideoNews> pageTuts = videoRepository.findAllByOrderByCreateAtDesc(paging);
             tutorials = pageTuts.getContent();
             Map<String, Object> response = new HashMap<>();
-            response.put("news", tutorials);
+            response.put("videos", tutorials);
             response.put("currentPage", pageTuts.getNumber());
             response.put("totalItems", pageTuts.getTotalElements());
             response.put("totalPages", pageTuts.getTotalPages());

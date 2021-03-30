@@ -1,13 +1,8 @@
 package com.news.update.component;
 
-import com.news.update.entity.Admins;
-import com.news.update.entity.Category;
-import com.news.update.entity.Role;
-import com.news.update.entity.Tags;
-import com.news.update.repository.AdminsRepository;
-import com.news.update.repository.CategoryRepository;
-import com.news.update.repository.RoleRepository;
-import com.news.update.repository.TagsRepository;
+import com.news.update.entity.*;
+import com.news.update.repository.*;
+import com.news.update.service.SocialServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +24,8 @@ public class DataLoader implements CommandLineRunner {
     private CategoryRepository categoryRepository;
     @Autowired
     private TagsRepository tagsRepository;
+    @Autowired
+    private SocialServiceImpl socialService;
 
 
     @Override
@@ -75,7 +72,14 @@ public class DataLoader implements CommandLineRunner {
             String array3[] = new String[]{"Дизайн",  "Экономика", "Мир","Бизнес", "Социальное", "Путешествовать", "Здоровье", "Мода", "Авто", "Спорт", "Технологии", "Интернет",
                     "Фотография", "Интересно"
             };
+            Social social = new Social();
+            social.setYoutube(1);
+            social.setFacebook(1);
+            social.setTelegram(1);
+            social.setInstagram(1);
+            social.setTwitter(1);
 
+            socialService.create(social);
             for (int i = 0; i < array2.length; i++) {
                 tags = new Tags();
                 tags.setTagUz(array2[i]);

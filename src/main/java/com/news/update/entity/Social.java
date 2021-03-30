@@ -19,38 +19,24 @@ import java.util.List;
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table
-public class News implements Serializable {
+public class Social implements Serializable {
     @Id
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @GeneratedValue(generator = "uuid")
     private String id;
-    @Column(nullable = false,length = 10000)
-
-    private String contentUz;
-    @Column(nullable = false,length = 10000)
-    private String contentRu;
 
     @Column(nullable = false)
-    private String titleUz;
+    private int telegram;
 
     @Column(nullable = false)
-    private String titleRu;
+    private int instagram;
 
-    @OneToOne
-    private Attachment headAttachment;
+    @Column(nullable = false)
+    private int facebook;
 
-    private Long likesCount;
+    @Column(nullable = false)
+    private int youtube;
 
-    private Long viewsCount;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Category category;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<Tags> tags;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY.MM.dd HH:mm:ss",timezone = "Asia/Tashkent")
-    @Column(nullable = false, updatable = false)
-    @CreationTimestamp
-    private Date createAt;
+    @Column(nullable = false)
+    private int twitter;
 }

@@ -66,6 +66,10 @@ public class AdminsController {
     private NewsRepository newsRepository;
 
 
+    @Autowired
+    private SocialServiceImpl socialService;
+
+
     @PutMapping("/edit")
     public ResponseEntity editAdmin(@RequestBody AdminRequest adminRequest, HttpServletRequest request) {
         try {
@@ -155,6 +159,12 @@ public class AdminsController {
         return ResponseEntity.ok(new ResultSucces(true, newsService.getAll()));
     }
 
+    @GetMapping("/news/rel")
+    public ResponseEntity getNewsByRelese(@RequestParam(defaultValue = "0") int page,
+                                          @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(new ResultSucces(true, newsService.getPagesAll(page, size)));
+    }
+
     @GetMapping("/news/likes")
     public ResponseEntity getNewsMostPopular() {
         return ResponseEntity.ok(new ResultSucces(true,
@@ -197,7 +207,7 @@ public class AdminsController {
     }
 
     @PostMapping("/news/add")
-    public ResponseEntity createNews( NewsRequest newsRequest) {
+    public ResponseEntity createNews(NewsRequest newsRequest) {
         System.out.println(newsRequest);
         if (newsRequest.getHash_id() != null) {
             if (newsService.create(newsRequest.getHash_id(), newsRequest)) {
@@ -290,6 +300,20 @@ public class AdminsController {
         getSumma.put("views", newsRepository.getSummaViews());
         getSumma.put("comments", newsRepository.getSummaComments());
         return ResponseEntity.ok(new ResultSucces(true, getSumma));
+    }
+
+    @PutMapping("/social/edit")
+    public ResponseEntity setEditSocial(@RequestBody Social social) {
+        if (socialService.edit(social)) {
+            return ResponseEntity.ok(new Result(true, "o'zgartirildi"));
+        }
+        return new ResponseEntity(new Result(true, "o'zgartirilmadi"), HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/social/one")
+    public ResponseEntity getSocials() {
+        Social social = socialService.getOne();
+        return ResponseEntity.ok(new ResultSucces(true, social));
     }
 
 }

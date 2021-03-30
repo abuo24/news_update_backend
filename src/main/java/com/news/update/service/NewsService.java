@@ -18,6 +18,8 @@ public interface NewsService {
 
     public List<NewsResponse> getAll();
 
+    public Map getPagesAll( int page, int size);
+
     public List<NewsResponse> getAllPostsByPopular();
 
     public boolean create(String hashId, NewsRequest newsRequest);
@@ -35,7 +37,7 @@ public interface NewsService {
 
     public Map getPages(String categoryid, int page, int size);
 
-//    public List<NewsResponse> getAllPostsByPopular();
+    //    public List<NewsResponse> getAllPostsByPopular();
 //    public List<NewsResponse> getAllPostsByPopular();
     public List<NewsResponse> getAllByPopularLikes();
 

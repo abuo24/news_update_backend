@@ -52,14 +52,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/auth/**","/api/message/**", "/api/admin/categories",
                         "/api/admin/categories/all",  "/api/admin/news/like/{id}",
                         "/api/admin/news/dislike/{id}", "/api/admin/news/likes", "/api/admin/news/views",
-                        "/api/admin/news/views/{id}",  "/api/admin/news/all",
-                        "/api/admin/{categoryid}/**","/api/admin/{categoryid}/shortnews/","/api/admin/{categoryid}/news","/api/admin/shortnews",
-                        "/api/files/preview/{hashId}","/api/files/download/{hashId}",
-                        "/api/comments/{newsid}","/api/comments/{newsid}/all",
-                        "/api/comments/{newsid}/all","/api/files/download/{hashId}",
-                        "/api/files/all","/api/message/add",
-                        "/api/auth/**","/api/videonews","/api/videonews/all","/api/tags/all","/api/files/preview/*").permitAll()
-                .antMatchers("/api/**","/api/admin/*","/api/admin/**","/api/videonews/*","/api/tags/**","/api/message/all","/api/admin/news/add").hasAnyAuthority("ROLE_ADMIN")
+                        "/api/admin/news/views/{id}",  "/api/admin/news/all", "/api/admin/news/rel*",
+                        "/api/admin/{categoryid}/**","/api/admin/{categoryid}/shortnews/","/api/admin/{categoryid}/news"
+                        ,"/api/admin/shortnews",
+                        "/api/files/download/*", "/api/comments/{newsid}","/api/comments/{newsid}/all",
+                        "/api/files/all","/api/message/add", "/api/auth/**","/api/admin/social/one","/api/videonews",
+                        "/api/videonews/all","/api/tags/all","/api/files/preview/*").permitAll()
+                .antMatchers("/api/**","/api/admin/social/**","/api/admin/*","/api/admin/**","/api/videonews/*","/api/tags/**","/api/message/all","/api/admin/news/add").hasAnyAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));

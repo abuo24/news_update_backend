@@ -276,5 +276,34 @@ public class NewsServiceImpl implements NewsService {
         }
         return null;
     }
+    @Override
+    public Map getPagesAll(int page, int size) {
+        try {
+            List<News> tutorials = new ArrayList<>();
+            Pageable paging = PageRequest.of(page, size);
+            Page<News> pageTuts = newsRepository.findAllByOrderByCreateAtDesc(paging);
+            tutorials = pageTuts.getContent();
+            NewsResponse newsResponse = null;
+            List<Comments> comments = null;
+            List<NewsResponse> newsResponses = new ArrayList<>();
+            for (int i = 0; i < tutorials.size(); i++) {
+                comments = new ArrayList<>();
+                newsResponse = new NewsResponse();
+                comments = commentsRepository.findAllByNewsIdOrderByCreateAtDesc(tutorials.get(i).getId());
+                newsResponse = new NewsResponse(tutorials.get(i).getId(), tutorials.get(i).getContentUz(), tutorials.get(i).getContentRu(), tutorials.get(i).getTitleUz(), tutorials.get(i).getTitleRu(), tutorials.get(i).getHeadAttachment(), tutorials.get(i).getLikesCount(), tutorials.get(i).getViewsCount(), tutorials.get(i).getCategory(), tutorials.get(i).getTags(), comments, tutorials.get(i).getCreateAt());
+                newsResponses.add(newsResponse);
+            }
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("news", newsResponses);
+            response.put("currentPage", pageTuts.getNumber());
+            response.put("totalItems", pageTuts.getTotalElements());
+            response.put("totalPages", pageTuts.getTotalPages());
+            return response;
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
+    }
 
 }

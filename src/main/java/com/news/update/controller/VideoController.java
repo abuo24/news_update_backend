@@ -27,8 +27,10 @@ public class VideoController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity getShortNews() {
-        return new ResponseEntity(new ResultSucces(true, videoService.getAll()), HttpStatus.OK);
+    public ResponseEntity getShortNews(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size) {
+        return new ResponseEntity(new ResultSucces(true, videoService.getPages(page,size)), HttpStatus.OK);
     }
 
     @PostMapping("/add")
