@@ -76,10 +76,40 @@ public class NewsServiceImpl implements NewsService {
         return null;
     }
 
+
+
     @Override
     public List<NewsResponse> getAllPostsByPopular() {
         try {
             List<News> newsList = newsRepository.findAllByOrderByViewsCountDesc();
+            NewsResponse newsResponse = null;
+            List<Comments> comments = null;
+            List<NewsResponse> newsResponses = new ArrayList<>();
+            for (int i = 0; i < newsList.size(); i++) {
+                comments = new ArrayList<>();
+                newsResponse = new NewsResponse();
+                comments = commentsRepository.findAllByNewsIdOrderByCreateAtDesc(newsList.get(i).getId());
+                newsResponse = new NewsResponse(newsList.get(i).getId(), newsList.get(i).getContentUz(), newsList.get(i).getContentRu(), newsList.get(i).getTitleUz(), newsList.get(i).getTitleRu(), newsList.get(i).getHeadAttachment(), newsList.get(i).getLikesCount(), newsList.get(i).getViewsCount(), newsList.get(i).getCategory(), newsList.get(i).getTags(), comments, newsList.get(i).getCreateAt());
+                newsResponses.add(newsResponse);
+            }
+            return newsResponses;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+
+    @Override
+    public List<NewsResponse> getAllPostsByPopularByLatest() {
+        try {
+            Calendar calendar = Calendar.getInstance();
+            Date today = calendar.getTime();
+
+            calendar.add(Calendar.DAY_OF_MONTH, -7);
+            Date beforeDays = calendar.getTime();
+            List<News> newsList = newsRepository.findAllByCreateAtLessThanAndCreateAtGreaterThanAndViewsCountIsNotNullOrderByViewsCountDesc(today,beforeDays);
+            System.out.println(newsList);
             NewsResponse newsResponse = null;
             List<Comments> comments = null;
             List<NewsResponse> newsResponses = new ArrayList<>();

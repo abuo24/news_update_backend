@@ -49,15 +49,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(
-                        "/api/auth/**","/api/message/**", "/api/admin/categories",
-                        "/api/admin/categories/all",  "/api/admin/news/like/{id}",
-                        "/api/admin/news/dislike/{id}", "/api/admin/news/likes", "/api/admin/news/views",
+                        "/api/auth/**","/api/message/**", "/api/admin/categories/all",
+                        "/api/admin/categories/parents",  "/api/admin/news/like/{id}",
+                        "/api/admin/news/dislike/{id}", "/api/admin/news/likes", "/api/admin/news/views", "/api/admin/news/latest",
                         "/api/admin/news/views/{id}",  "/api/admin/news/all", "/api/admin/news/rel*",
                         "/api/admin/{categoryid}/**","/api/admin/{categoryid}/shortnews/","/api/admin/{categoryid}/news"
-                        ,"/api/admin/shortnews",
-                        "/api/files/download/*", "/api/comments/{newsid}","/api/comments/{newsid}/all",
-                        "/api/files/all","/api/message/add", "/api/auth/**","/api/admin/social/one","/api/videonews",
-                        "/api/videonews/all","/api/tags/all","/api/files/preview/*").permitAll()
+                        ,"/api/admin/shortnews*", "/api/files/download/*", "/api/comments/{newsid}",
+                        "/api/comments/{newsid}/all", "/api/files/all","/api/message/add", "/api/auth/**",
+                        "/api/admin/social/one","/api/videonews", "/api/videonews/all",
+                        "/api/tags/all","/api/files/preview/*").permitAll()
                 .antMatchers("/api/**","/api/admin/social/**","/api/admin/*","/api/admin/**","/api/videonews/*","/api/tags/**","/api/message/all","/api/admin/news/add").hasAnyAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and()

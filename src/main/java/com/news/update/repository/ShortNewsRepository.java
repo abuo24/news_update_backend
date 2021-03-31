@@ -18,4 +18,5 @@ public interface ShortNewsRepository extends JpaRepository<ShortNews, String> {
             Pageable pageable);
     List<ShortNews> findAllByCategoryId(
             @Param("categoryid") String categoryid);
+    Page<ShortNews> findAllByOrderByCreateAtDesc(Pageable pageable);
 }

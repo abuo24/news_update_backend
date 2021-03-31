@@ -114,4 +114,27 @@ public class ShortNewsServiceImpl implements ShortNewsServise {
 
         return null;
     }
+    @Override
+    public Map getAllPages(int page, int size) {
+        try {
+            List<ShortNews> tutorials = new ArrayList<>();
+            Pageable paging = PageRequest.of(page, size);
+
+            Page<ShortNews> pageTuts = shortNewsRepository.findAllByOrderByCreateAtDesc( paging);
+            tutorials = pageTuts.getContent();
+            System.out.println(tutorials);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("shortnews", tutorials);
+            response.put("currentPage", pageTuts.getNumber());
+            response.put("totalItems", pageTuts.getTotalElements());
+            response.put("totalPages", pageTuts.getTotalPages());
+
+            return response;
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return null;
+    }
 }

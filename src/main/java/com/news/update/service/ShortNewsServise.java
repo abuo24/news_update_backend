@@ -14,4 +14,5 @@ public interface ShortNewsServise {
     public boolean delete(String id);
     public List<ShortNews> getAll();
     public Map getPages(String categoryid,int page, int size);
+    public Map getAllPages(int page,int size);
 }

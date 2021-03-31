@@ -13,14 +13,18 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
 public interface NewsRepository extends JpaRepository<News, String> {
     boolean findAllById(String id);
 
-    //    List<News> findAll(Sort sort);
     List<News> findAllByOrderByViewsCountDesc();
+
+    List<News> findAllByCreateAtLessThanAndCreateAtGreaterThanAndViewsCountIsNotNullOrderByViewsCountDesc(Date date, Date days);
+
+
 
     List<News> findAllByOrderByLikesCountDesc();
 

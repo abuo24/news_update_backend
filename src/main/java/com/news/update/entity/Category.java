@@ -28,6 +28,9 @@ public class Category implements Serializable {
     @Column(nullable = false)
     private String nameRu;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Category parent;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(nullable = false, updatable = false)
     @CreationTimestamp

@@ -21,7 +21,7 @@ public interface NewsService {
     public Map getPagesAll( int page, int size);
 
     public List<NewsResponse> getAllPostsByPopular();
-
+    public List<NewsResponse> getAllPostsByPopularByLatest();
     public boolean create(String hashId, NewsRequest newsRequest);
 
     public boolean edit(String id, NewsRequest newsRequest);

@@ -5,6 +5,7 @@ import com.news.update.entity.News;
 import com.news.update.entity.ShortNews;
 import com.news.update.model.Result;
 import com.news.update.model.ResultSucces;
+import com.news.update.payload.CategoryRequest;
 import com.news.update.repository.CategoryRepository;
 import com.news.update.repository.NewsRepository;
 import com.news.update.repository.ShortNewsRepository;
@@ -57,35 +58,40 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
 
+//    @Override
+//    public Map getPages(int page, int size) {
+//        try {
+//            List<Category> tutorials = new ArrayList<Category>();
+//            Pageable paging = PageRequest.of(page, size, Sort.by("name"));
+//
+//            Page<Category> pageTuts = categoryRepository.findAll(paging);
+//            tutorials = pageTuts.getContent();
+//
+//            Map<String, Object> response = new HashMap<>();
+//            response.put("category", tutorials);
+//            response.put("currentPage", pageTuts.getNumber());
+//            response.put("totalItems", pageTuts.getTotalElements());
+//            response.put("totalPages", pageTuts.getTotalPages());
+//
+//            return response;
+//        } catch (Exception e) {
+//            return null;
+//        }
+//    }
+
     @Override
-    public Map getPages(int page, int size) {
-        try {
-            List<Category> tutorials = new ArrayList<Category>();
-            Pageable paging = PageRequest.of(page, size, Sort.by("name"));
-
-            Page<Category> pageTuts = categoryRepository.findAll(paging);
-            tutorials = pageTuts.getContent();
-
-            Map<String, Object> response = new HashMap<>();
-            response.put("category", tutorials);
-            response.put("currentPage", pageTuts.getNumber());
-            response.put("totalItems", pageTuts.getTotalElements());
-            response.put("totalPages", pageTuts.getTotalPages());
-
-            return response;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    @Override
-    public boolean edit(String id, Category category) {
+    public boolean edit(String id, CategoryRequest category) {
         try {
             Optional<Category> category1 = categoryRepository.findById(id);
             if (category1 != null) {
-                category.setId(id);
-                category.setCreateAt(category1.get().getCreateAt());
-                if (categoryRepository.save(category) != null) {
+                category1.get().setNameRu(category.getNameRu());
+                category1.get().setNameUz(category.getNameUz());
+                if (category.getParent()!=null) {
+                    category1.get().setParent(categoryRepository.getOne(category.getParent()));
+                } else {
+                    category1.get().setParent(null);
+                }
+                if (categoryRepository.save(category1.get()) != null) {
                     return true;
                 }
             }
@@ -109,6 +115,11 @@ public class CategoryServiceImpl implements CategoryService {
                 shortNews.forEach(item -> {
                     item.setCategory(categoryRepository.findById(category).get());
                     shortNewsRepository.save(item);
+                });
+                List<Category> categories = categoryRepository.findAllByParentId(id);
+                categories.forEach(item->{
+                    item.setParent(null);
+                    categoryRepository.save(item);
                 });
                 categoryRepository.deleteById(id);
                 return true;

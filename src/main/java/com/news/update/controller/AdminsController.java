@@ -6,6 +6,7 @@ import com.news.update.model.Result;
 import com.news.update.model.ResultSucces;
 import com.news.update.payload.*;
 import com.news.update.repository.AdminsRepository;
+import com.news.update.repository.CategoryRepository;
 import com.news.update.repository.NewsRepository;
 import com.news.update.security.JwtTokenProvider;
 import com.news.update.service.*;
@@ -22,10 +23,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
@@ -52,6 +51,8 @@ public class AdminsController {
 
     @Autowired
     private ShortNewsServise shortNewsServise;
+  @Autowired
+    private CategoryRepository categoryRepository;
 
     @Autowired
     private AttachmentService attachmentService;
@@ -116,17 +117,26 @@ public class AdminsController {
         }
     }
 
-    @GetMapping("/categories")
-    public ResponseEntity getCategoriesByPage(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size, HttpServletRequest httpServletRequest) {
-        return ResponseEntity.ok(categoryService.getPages(page, size));
-    }
 
     @GetMapping("/categories/all")
     public ResponseEntity getCategories() {
         return ResponseEntity.ok(categoryService.getAll());
     }
+
+    @GetMapping("/categories/parents")
+    public ResponseEntity getCategoriesByParents() {
+        List<Category> categoryList = new ArrayList<>(categoryRepository.findByParentIsNotNull());;
+        Set<Category> categoryList1 = new HashSet<>();
+        categoryList.forEach(item->{
+            categoryList1.add(item.getParent());
+        });
+
+        return ResponseEntity.ok(new ResultSucces(true,categoryList1));
+    }
+//    @GetMapping("/categories/parents")
+//    public ResponseEntity getCategoriesByParentsId(@PathVariable String id) {
+//        return ResponseEntity.ok(new ResultSucces(true,categoryRepository.findByParentIsNotNull()));
+//    }
 
     @PostMapping("/categori/add")
     public ResponseEntity create(@RequestBody Category category) {
@@ -137,7 +147,7 @@ public class AdminsController {
     }
 
     @PutMapping("/categori/{id}")
-    public ResponseEntity editCategory(@PathVariable String id, @RequestBody Category category) {
+    public ResponseEntity editCategory(@PathVariable String id, @RequestBody CategoryRequest category) {
         if (categoryService.edit(id, category)) {
             return ResponseEntity.ok(new Result(true, "saqlandi"));
         }
@@ -176,6 +186,12 @@ public class AdminsController {
     public ResponseEntity getNewsMostViews() {
         return ResponseEntity.ok(new ResultSucces(true,
                 newsService.getAllPostsByPopular()
+        ));
+    }
+    @GetMapping("/news/latest")
+    public ResponseEntity getNewsMostViewsByLatest() {
+        return ResponseEntity.ok(new ResultSucces(true,
+                newsService.getAllPostsByPopularByLatest()
         ));
     }
 
@@ -268,8 +284,9 @@ public class AdminsController {
     }
 
     @GetMapping("/shortnews")
-    public ResponseEntity getShortNews() {
-        return new ResponseEntity(new ResultSucces(true, shortNewsServise.getAll()), HttpStatus.OK);
+    public ResponseEntity getShortNews(@RequestParam(defaultValue = "0") int page,
+                                       @RequestParam(defaultValue = "10") int size) {
+        return new ResponseEntity(new ResultSucces(true, shortNewsServise.getAllPages(page,size)), HttpStatus.OK);
     }
 
     @PostMapping("/shortnews/add")
