@@ -24,12 +24,9 @@ public interface NewsRepository extends JpaRepository<News, String> {
 
     List<News> findAllByCreateAtLessThanAndCreateAtGreaterThanAndViewsCountIsNotNullOrderByViewsCountDesc(Date date, Date days);
 
-
-
     List<News> findAllByOrderByLikesCountDesc();
 
     List<News> findAllByOrderByCreateAtDesc();
-//    findAllByOrderByIdAsc
 
     List<News> findAllByTagsId(String tags_id);
 

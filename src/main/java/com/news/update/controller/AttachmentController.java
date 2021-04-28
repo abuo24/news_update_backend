@@ -36,6 +36,7 @@ public class AttachmentController {
 
     @PostMapping("/upload")
     public ResponseEntity upload(@RequestParam("file") MultipartFile multipartFile){
+        attachmentService.save(multipartFile);
         return ResponseEntity.ok(multipartFile.getOriginalFilename()+" file saqlandi");
     }
 
