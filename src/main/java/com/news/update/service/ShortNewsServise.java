@@ -15,4 +15,5 @@ public interface ShortNewsServise {
     public List<ShortNews> getAll();
     public Map getPages(String categoryid,int page, int size);
     public Map getAllPages(int page,int size);
+    public List<Map> getHeadShortNews();
 }

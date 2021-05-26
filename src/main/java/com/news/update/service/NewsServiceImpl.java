@@ -306,6 +306,40 @@ public class NewsServiceImpl implements NewsService {
         }
         return null;
     }
+
+    @Override
+    public List<Map> getHeadNews() {
+        try {
+            List<Category> categories = categoryRepository.findAll();
+            List<News> tutorials = new ArrayList<>();
+            List<Map> mapList = new ArrayList<>();
+            for (int i = 0; i < categories.size(); i++) {
+                tutorials = new ArrayList<>();
+                Pageable paging = PageRequest.of(0, 5);
+                Page<News> pageTuts = newsRepository.findAllByCategoryIdOrderByCreateAtDesc(categories.get(i).getId(), paging);
+                tutorials = pageTuts.getContent();
+                NewsResponse newsResponse = null;
+                List<Comments> comments = null;
+                List<NewsResponse> newsResponses = new ArrayList<>();
+                for (int j = 0; j < tutorials.size(); j++) {
+                    comments = new ArrayList<>();
+                    newsResponse = new NewsResponse();
+                    comments = commentsRepository.findAllByNewsIdOrderByCreateAtDesc(tutorials.get(j).getId());
+                    newsResponse = new NewsResponse(tutorials.get(j).getId(), tutorials.get(j).getContentUz(), tutorials.get(j).getContentRu(), tutorials.get(j).getTitleUz(), tutorials.get(j).getTitleRu(), tutorials.get(j).getHeadAttachment(), tutorials.get(j).getLikesCount(), tutorials.get(j).getViewsCount(), tutorials.get(j).getCategory(), tutorials.get(j).getTags(), comments, tutorials.get(j).getCreateAt());
+                    newsResponses.add(newsResponse);
+                }
+                Map<String, Object> map =new HashMap<>();
+                map.put("categorie",categories.get(i));
+                map.put("news",newsResponses);
+                mapList.add(map);
+            }
+            return mapList;
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
     @Override
     public Map getPagesAll(int page, int size) {
         try {

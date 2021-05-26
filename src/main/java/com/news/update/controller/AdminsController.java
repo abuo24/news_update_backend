@@ -133,10 +133,6 @@ public class AdminsController {
 
         return ResponseEntity.ok(new ResultSucces(true,categoryList1));
     }
-//    @GetMapping("/categories/parents")
-//    public ResponseEntity getCategoriesByParentsId(@PathVariable String id) {
-//        return ResponseEntity.ok(new ResultSucces(true,categoryRepository.findByParentIsNotNull()));
-//    }
 
     @PostMapping("/categori/add")
     public ResponseEntity create(@RequestBody Category category) {

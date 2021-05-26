@@ -8,6 +8,8 @@ import com.news.update.model.ResultSucces;
 import com.news.update.payload.LoginRequest;
 import com.news.update.repository.AdminsRepository;
 import com.news.update.security.JwtTokenProvider;
+import com.news.update.service.NewsService;
+import com.news.update.service.ShortNewsServise;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,6 +31,10 @@ public class AuthController {
 
     @Autowired
     AuthenticationManager authenticationManager;
+    @Autowired
+    NewsService newsService;
+    @Autowired
+    ShortNewsServise shortNewsServise;
 
     @Autowired
     AdminsRepository adminsRepository;
@@ -42,7 +48,7 @@ public class AuthController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginVM.getUsername(), loginVM.getPassword()));
             Set<Role> roleList = new HashSet<>(user.getRoles());
-            String token = jwtProvider.createToken(user.getUsername(),roleList);
+            String token = jwtProvider.createToken(user.getUsername(), roleList);
             Map<Object, Object> map = new HashMap<>();
             map.put("succes", true);
             map.put("username", user.getUsername());
@@ -55,9 +61,18 @@ public class AuthController {
 
     @GetMapping("/getme")
     public ResponseEntity getUser(HttpServletRequest request) {
-//        userRepo.findByUsername(jwtTokenProvider.getUser(jwtTokenProvider.resolveToken(req)))
         Admins user = adminsRepository.findByUsername(jwtProvider.getUser(jwtProvider.resolveToken(request)));
-        return user!=null? ResponseEntity.ok(new ResultSucces(true, user)) : (new ResponseEntity(new Result(false, "token is invalid"), BAD_REQUEST));
+        return user != null ? ResponseEntity.ok(new ResultSucces(true, user)) : (new ResponseEntity(new Result(false, "token is invalid"), BAD_REQUEST));
+    }
+
+    @GetMapping("/news/head")
+    public ResponseEntity getHeadNewsForHomePage() {
+        return ResponseEntity.ok(new ResultSucces(true, newsService.getHeadNews()));
+    }
+
+    @GetMapping("/shortnews/head")
+    public ResponseEntity getHeadShortNewsForHomePage() {
+        return ResponseEntity.ok(new ResultSucces(true, shortNewsServise.getHeadShortNews()));
     }
 
 

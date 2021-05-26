@@ -1,10 +1,13 @@
 package com.news.update.service;
 
+import com.news.update.entity.Category;
+import com.news.update.entity.Comments;
 import com.news.update.entity.News;
 import com.news.update.entity.ShortNews;
 import com.news.update.model.Result;
 import com.news.update.model.ResultSucces;
 import com.news.update.payload.NewsRequest;
+import com.news.update.payload.NewsResponse;
 import com.news.update.payload.ShortNewsRequest;
 import com.news.update.repository.CategoryRepository;
 import com.news.update.repository.ShortNewsRepository;
@@ -114,6 +117,30 @@ public class ShortNewsServiceImpl implements ShortNewsServise {
 
         return null;
     }
+
+    @Override
+    public List<Map> getHeadShortNews() {
+        try {
+            List<Category> categories = categoryRepository.findAll();
+            List<ShortNews> tutorials = new ArrayList<>();
+            List<Map> mapList = new ArrayList<>();
+            for (int i = 0; i < categories.size(); i++) {
+                tutorials = new ArrayList<>();
+                Pageable paging = PageRequest.of(0, 2);
+                Page<ShortNews> pageTuts = shortNewsRepository.findAllByCategoryIdOrderByCreateAtDesc(categories.get(i).getId(), paging);
+                tutorials = pageTuts.getContent();
+                Map<String, Object> map =new HashMap<>();
+                map.put("categorie",categories.get(i));
+                map.put("news",tutorials);
+                mapList.add(map);
+            }
+            return mapList;
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
     @Override
     public Map getAllPages(int page, int size) {
         try {
